@@ -29,6 +29,6 @@ Antes de ejecutar la app necesitas tener instalado:
 ## 📥 Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/tu-repo.git
-cd tu-repo
+git clone https://github.com/Michelle-RA/franquicias-reactive.git
+cd franquicias-reactive
 
