@@ -1,11 +1,13 @@
 package com.franquicias.demo.infrastructure.controller;
 
 import com.franquicias.demo.application.port.IProductService;
+import com.franquicias.demo.domain.dto.ListBranchDTO;
 import com.franquicias.demo.domain.dto.Product;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -31,5 +33,11 @@ public class ProductController {
     @PatchMapping("/{id}")
     public ResponseEntity<Mono<Product>> update(@RequestParam Integer stock, @PathVariable Long id){
         return ResponseEntity.ok(iProductService.updateStock(stock, id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Flux<ListBranchDTO>> findAll(@RequestParam Long franchiseId) throws InterruptedException {
+        Flux<ListBranchDTO> clients = iProductService.findAll(franchiseId);
+        return ResponseEntity.ok(clients.switchIfEmpty(Mono.empty()));
     }
 }

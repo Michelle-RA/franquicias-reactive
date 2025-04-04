@@ -1,6 +1,7 @@
 package com.franquicias.demo.application.service;
 
 import com.franquicias.demo.application.port.IProductService;
+import com.franquicias.demo.domain.dto.ListBranchDTO;
 import com.franquicias.demo.domain.dto.Product;
 import com.franquicias.demo.domain.mapper.ProductDataMapper;
 import com.franquicias.demo.infrastructure.entity.ProductEntity;
@@ -8,6 +9,7 @@ import com.franquicias.demo.infrastructure.repository.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -43,4 +45,14 @@ public class ProductService implements IProductService {
             return productRepository.save(existingProduct);
         }).map((ProductDataMapper::fromProductEntityToProduct));
     }
+
+    @Override
+    public Flux<ListBranchDTO> findAll(Long idFranchise) throws InterruptedException {
+        logger.info("Searching List of Branch");
+        Flux<ListBranchDTO> clientEntityFlux  = productRepository.findAll(idFranchise);
+        logger.info("Searching List of Branch completed");
+        return clientEntityFlux.switchIfEmpty(Flux.empty());
+    }
+
+
 }
