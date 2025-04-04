@@ -2,6 +2,8 @@ package com.franquicias.demo.infrastructure.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Entity
@@ -13,17 +15,13 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table(name = "productos")
 @Inheritance(strategy= InheritanceType.JOINED)
 @ToString
+@DynamicUpdate
 public class ProductEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @jakarta.persistence.Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-
-    @Column(name = "nombre")
     private String name;
-
     private int stock;
-
-    @ManyToOne
-    @JoinColumn(name = "sucursal", nullable = false)
-    private BranchEntity branch_id ;
+    private Long branchId ;
 }

@@ -2,9 +2,8 @@ package com.franquicias.demo.domain.mapper;
 
 import com.franquicias.demo.domain.dto.Franchise;
 import com.franquicias.demo.infrastructure.entity.FranchiseEntity;
-import org.springframework.stereotype.Component;
 
-@Component
+
 public class FranchiseDataMapper {
     public static FranchiseEntity fromFranchiseToFranchiseEntity(Franchise franchise){
         return FranchiseEntity.builder()

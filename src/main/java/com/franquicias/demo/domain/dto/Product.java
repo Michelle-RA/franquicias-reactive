@@ -1,9 +1,5 @@
 package com.franquicias.demo.domain.dto;
 
-import com.franquicias.demo.infrastructure.entity.FranchiseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -14,13 +10,14 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Branch {
+public class Product {
     private Long id;
     @NotBlank(message = "It should not be blank")
     @NotEmpty(message = "It should not be empty")
     @NotNull(message = "It should not be null")
     private String name;
 
+    private int stock;
     @NotNull(message = "It should not be null")
-    private Long franchise;
+    private Long branchId ;
 }

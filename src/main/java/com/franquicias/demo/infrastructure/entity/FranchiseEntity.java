@@ -1,8 +1,10 @@
 package com.franquicias.demo.infrastructure.entity;
 
 
+
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Entity
@@ -16,7 +18,8 @@ import org.springframework.data.relational.core.mapping.Table;
 @ToString
 public class FranchiseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @jakarta.persistence.Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "nombre")
