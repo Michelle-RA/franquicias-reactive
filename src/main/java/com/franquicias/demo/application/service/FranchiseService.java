@@ -7,6 +7,7 @@ import com.franquicias.demo.domain.dto.Branch;
 import com.franquicias.demo.domain.dto.Franchise;
 import com.franquicias.demo.domain.dto.Product;
 import com.franquicias.demo.domain.mapper.FranchiseDataMapper;
+import com.franquicias.demo.domain.mapper.ProductDataMapper;
 import com.franquicias.demo.infrastructure.entity.BranchEntity;
 import com.franquicias.demo.infrastructure.entity.FranchiseEntity;
 import com.franquicias.demo.infrastructure.entity.ProductEntity;
@@ -36,5 +37,15 @@ public class FranchiseService implements IFranchiseService{
         logger.info("Saved franchise");
         return franchiseEntity.map(FranchiseDataMapper::fromFranchiseEntityToFranchise)
                 .switchIfEmpty(Mono.empty());
+    }
+
+    @Override
+    public Mono<Franchise> updateName(String nameFranchise, Long id) {
+        Mono<FranchiseEntity> franchiseEntityMono = franchiseRepository.findById(id);
+
+        return franchiseEntityMono.flatMap((existingFranchise) -> {
+            existingFranchise.setName(nameFranchise);
+            return franchiseRepository.save(existingFranchise);
+        }).map((FranchiseDataMapper::fromFranchiseEntityToFranchise));
     }
 }

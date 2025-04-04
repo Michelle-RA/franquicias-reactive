@@ -1,6 +1,7 @@
 package com.franquicias.demo.domain.mapper;
 
 import com.franquicias.demo.domain.dto.Branch;
+import com.franquicias.demo.domain.dto.ListBranchDTOClass;
 import com.franquicias.demo.infrastructure.entity.BranchEntity;
 
 public class BranchDataMapper {

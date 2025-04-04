@@ -1,6 +1,7 @@
 package com.franquicias.demo.application.port;
 
-import com.franquicias.demo.domain.dto.ListBranchDTO;
+import com.franquicias.demo.domain.dto.Franchise;
+import com.franquicias.demo.domain.dto.ListBranchDTOClass;
 import com.franquicias.demo.domain.dto.Product;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -11,5 +12,6 @@ public interface IProductService {
     Mono<Product> save(Product product);
     Mono<Object> delete(Long id);
     Mono<Product> updateStock(Integer stock, Long id);
-    Flux<ListBranchDTO> findAll(Long idFranchise) throws InterruptedException;
+    Flux<ListBranchDTOClass> findAll(Long idFranchise) throws InterruptedException;
+    Mono<Product> updateName(String nameProduct, Long id);
 }

@@ -1,9 +1,10 @@
 package com.franquicias.demo.application.service;
 
 import com.franquicias.demo.application.port.IProductService;
-import com.franquicias.demo.domain.dto.ListBranchDTO;
+import com.franquicias.demo.domain.dto.ListBranchDTOClass;
 import com.franquicias.demo.domain.dto.Product;
 import com.franquicias.demo.domain.mapper.ProductDataMapper;
+import com.franquicias.demo.infrastructure.controller.exception.NotFoundException;
 import com.franquicias.demo.infrastructure.entity.ProductEntity;
 import com.franquicias.demo.infrastructure.repository.ProductRepository;
 import org.slf4j.Logger;
@@ -32,9 +33,11 @@ public class ProductService implements IProductService {
 
     @Override
     public Mono<Object> delete(Long id) {
-        Mono<ProductEntity> productEntityMono = productRepository.findById(id);
-        return productEntityMono.flatMap(productRepository::delete);
+        return productRepository.findById(id)
+                .switchIfEmpty(Mono.error(new NotFoundException("Producto con ID " + id + " no encontrado")))
+                .flatMap(product -> productRepository.delete(product));
     }
+
 
     @Override
     public Mono<Product> updateStock(Integer stock, Long id) {
@@ -47,11 +50,21 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Flux<ListBranchDTO> findAll(Long idFranchise) throws InterruptedException {
+    public Flux<ListBranchDTOClass> findAll(Long idFranchise) throws InterruptedException {
         logger.info("Searching List of Branch");
-        Flux<ListBranchDTO> clientEntityFlux  = productRepository.findAll(idFranchise);
+        Flux<ListBranchDTOClass> branchEntityFlux  = productRepository.findAllData(idFranchise);
         logger.info("Searching List of Branch completed");
-        return clientEntityFlux.switchIfEmpty(Flux.empty());
+        return branchEntityFlux.switchIfEmpty(Flux.empty());
+    }
+
+    @Override
+    public Mono<Product> updateName(String nameProduct, Long id) {
+        Mono<ProductEntity> ProductEntityMono = productRepository.findById(id);
+
+        return ProductEntityMono.flatMap((existingProduct) -> {
+            existingProduct.setName(nameProduct);
+            return productRepository.save(existingProduct);
+        }).map((ProductDataMapper::fromProductEntityToProduct));
     }
 
 

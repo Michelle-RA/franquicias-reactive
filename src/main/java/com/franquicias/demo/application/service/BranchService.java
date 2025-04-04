@@ -2,8 +2,11 @@ package com.franquicias.demo.application.service;
 
 import com.franquicias.demo.application.port.IBranchService;
 import com.franquicias.demo.domain.dto.Branch;
+import com.franquicias.demo.domain.dto.Franchise;
 import com.franquicias.demo.domain.mapper.BranchDataMapper;
+import com.franquicias.demo.domain.mapper.FranchiseDataMapper;
 import com.franquicias.demo.infrastructure.entity.BranchEntity;
+import com.franquicias.demo.infrastructure.entity.FranchiseEntity;
 import com.franquicias.demo.infrastructure.repository.BranchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,5 +29,15 @@ public class BranchService implements IBranchService{
         logger.info("Saved branch");
         return branchEntity.map(BranchDataMapper::fromBranchEntityToBranch)
                 .switchIfEmpty(Mono.empty());
+    }
+
+    @Override
+    public Mono<Branch> updateName(String nameBranch, Long id) {
+        Mono<BranchEntity> branchEntityMono = branchRepository.findById(id);
+
+        return branchEntityMono.flatMap((existingBranch) -> {
+            existingBranch.setName(nameBranch);
+            return branchRepository.save(existingBranch);
+        }).map((BranchDataMapper::fromBranchEntityToBranch));
     }
 }

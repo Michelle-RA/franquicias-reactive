@@ -1,6 +1,6 @@
 package com.franquicias.demo.infrastructure.repository;
 
-import com.franquicias.demo.domain.dto.ListBranchDTO;
+import com.franquicias.demo.domain.dto.ListBranchDTOClass;
 import com.franquicias.demo.infrastructure.entity.ProductEntity;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
@@ -9,11 +9,11 @@ import reactor.core.publisher.Flux;
 public interface ProductRepository extends R2dbcRepository<ProductEntity, Long> {
 
     @Query("""
-            SELECT s.id AS branchId,
-                   s.name AS nameBranch,
-                   p.id AS productId,
-                   p.name AS nameProduct,
-                   p.stock
+            SELECT s.id AS branch_id,
+                 s.name AS name_branch,
+                 p.id AS product_id,
+                 p.name AS name_product,
+                 p.stock
             FROM sucursales s
             LEFT JOIN productos p ON p.branch_id = s.id
             WHERE s.franchise = :franchiseId
@@ -24,6 +24,6 @@ public interface ProductRepository extends R2dbcRepository<ProductEntity, Long> 
             ))
             ORDER BY s.id;
             """)
-    Flux<ListBranchDTO> findAll(Long franchiseId);
+    Flux<ListBranchDTOClass> findAllData(Long franchiseId);
 }
 

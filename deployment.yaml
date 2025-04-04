@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-reactive-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spring-reactive-app
+  template:
+    metadata:
+      labels:
+        app: spring-reactive-app
+    spec:
+      containers:
+        - name: spring-reactive-app
+          image: <tu_id_aws>.dkr.ecr.us-east-1.amazonaws.com/spring-reactive-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_R2DBC_URL
+              value: r2dbc:postgresql://usuario:password@host:5432/db
+            - name: SPRING_R2DBC_USERNAME
+              value: usuario
+            - name: SPRING_R2DBC_PASSWORD
+              value: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-reactive-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: spring-reactive-app

@@ -1,14 +1,18 @@
 package com.franquicias.demo.infrastructure.controller;
 
 import com.franquicias.demo.application.port.IProductService;
-import com.franquicias.demo.domain.dto.ListBranchDTO;
+import com.franquicias.demo.domain.dto.Franchise;
+import com.franquicias.demo.domain.dto.ListBranchDTOClass;
 import com.franquicias.demo.domain.dto.Product;
+import com.franquicias.demo.domain.mapper.BranchDataMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("product")
@@ -25,10 +29,12 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Mono<Object>> delete(@PathVariable Long id){
-        Mono<Object> res = iProductService.delete(id);
-        return new ResponseEntity<>(res, HttpStatus.NO_CONTENT);
+    public ResponseEntity<Mono<Map<String, String>>> delete(@PathVariable Long id) {
+        Mono<Map<String, String>> response = iProductService.delete(id)
+                .thenReturn(Map.of("message", "Producto eliminado exitosamente"));
+        return ResponseEntity.ok(response);
     }
+
 
     @PatchMapping("/{id}")
     public ResponseEntity<Mono<Product>> update(@RequestParam Integer stock, @PathVariable Long id){
@@ -36,8 +42,14 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Flux<ListBranchDTO>> findAll(@RequestParam Long franchiseId) throws InterruptedException {
-        Flux<ListBranchDTO> clients = iProductService.findAll(franchiseId);
-        return ResponseEntity.ok(clients.switchIfEmpty(Mono.empty()));
+    public ResponseEntity<Flux<ListBranchDTOClass>> findAll(@RequestParam Long franchiseId) throws InterruptedException {
+        Flux<ListBranchDTOClass> branch = iProductService.findAll(franchiseId);
+        return ResponseEntity.ok(branch.switchIfEmpty(Flux.empty()));
     }
+
+    @PatchMapping("nameProduct/{id}")
+    public ResponseEntity<Mono<Product>> updateNameBranch(@RequestParam String nameProduct, @PathVariable Long id){
+        return ResponseEntity.ok(iProductService.updateName(nameProduct, id));
+    }
+
 }
