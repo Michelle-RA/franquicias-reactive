@@ -19,11 +19,11 @@ spec:
             - containerPort: 8080
           env:
             - name: SPRING_R2DBC_URL
-              value: r2dbc:postgresql://usuario:password@host:5432/db
+              value: r2dbc:postgresql://bgahqehskcahpd1knmmf-postgresql.services.clever-cloud.com:50013/bgahqehskcahpd1knmmf
             - name: SPRING_R2DBC_USERNAME
-              value: usuario
+              value: ua0soeub7hwmgclmunyb
             - name: SPRING_R2DBC_PASSWORD
-              value: password
+              value: eFe5vMqoeTfQiedtKol9ygFTMTcgSY
 ---
 apiVersion: v1
 kind: Service
